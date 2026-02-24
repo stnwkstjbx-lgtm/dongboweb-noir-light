@@ -29,11 +29,6 @@ a,button{cursor:none}::-webkit-scrollbar{width:0}
 .cur-text{position:fixed;pointer-events:none;z-index:10001;font-size:.46rem;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;opacity:0;transition:opacity .3s;font-weight:500;font-family:var(--display)}
 .cur-text.show{opacity:1}
 
-/* ============ PLACEHOLDER ============ */
-.ph{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:10px}
-.ph-icon{width:28px;height:28px;opacity:.08}
-.ph-icon svg{width:100%;height:100%;fill:currentColor;color:var(--fg)}
-.ph-text{font-size:.5rem;color:rgba(255,255,255,.06);letter-spacing:.22em;text-transform:uppercase;font-weight:400}
 
 /* ============ NAV — 좌 링크 + 우 로고 (반전) ============ */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:28px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
@@ -47,7 +42,7 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 /* ============ HERO — 좌정렬 초대형 영문 ============ */
 .hero{height:100vh;position:relative;display:flex;align-items:flex-end;padding:48px;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(10,10,10,.7) 100%)}
-.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a1a1a 0%,#111 40%,#0a0a0a 100%);display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80') center/cover no-repeat;display:flex;align-items:center;justify-content:center}
 .hero-content{position:relative;z-index:2;width:100%}
 .hero-big{font-family:var(--display);font-size:clamp(5rem,16vw,14rem);font-weight:800;line-height:.85;letter-spacing:-.04em;text-transform:uppercase;color:var(--fg);margin-bottom:32px}
 .hero-row{display:flex;justify-content:space-between;align-items:flex-end}
@@ -73,7 +68,7 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 
 .st-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;margin:0 auto}
 .st-card{position:relative;overflow:hidden;transition:all .5s cubic-bezier(.16,1,.3,1)}
-.st-bg-1{background:linear-gradient(155deg,#222,#1a1a1a)}.st-bg-2{background:linear-gradient(155deg,#1e1e1e,#161616)}
+.st-bg-1{background:url('https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80') center/cover no-repeat}.st-bg-2{background:url('https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=800&q=80') center/cover no-repeat}
 .st-info{padding:20px 0}
 .st-info h3{font-family:var(--body);font-size:1rem;font-weight:400;margin-bottom:4px;letter-spacing:.02em}
 .st-role{font-size:.52rem;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;font-weight:400;margin-bottom:12px}
@@ -92,9 +87,9 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 .gal-cell{width:280px;height:340px;overflow:hidden;position:relative;flex-shrink:0}
 .gal-cell-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:all .6s cubic-bezier(.16,1,.3,1);filter:grayscale(1) contrast(1.05)}
 .gal-cell:hover .gal-cell-inner{filter:grayscale(.5) contrast(1.1);transform:scale(1.06)}
-.gc-1{background:linear-gradient(155deg,#222,#181818)}.gc-2{background:linear-gradient(155deg,#1c1c1c,#141414)}
-.gc-3{background:linear-gradient(155deg,#202020,#1a1a1a)}.gc-4{background:linear-gradient(155deg,#1e1e1e,#161616)}
-.gc-5{background:linear-gradient(155deg,#242424,#1c1c1c)}.gc-6{background:linear-gradient(155deg,#1a1a1a,#121212)}
+.gc-1{background:url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80') center/cover no-repeat}.gc-2{background:url('https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=800&q=80') center/cover no-repeat}
+.gc-3{background:url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&q=80') center/cover no-repeat}.gc-4{background:url('https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800&q=80') center/cover no-repeat}
+.gc-5{background:url('https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=800&q=80') center/cover no-repeat}.gc-6{background:url('https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?w=800&q=80') center/cover no-repeat}
 
 /* ============ MENU — 2×2 가격 그리드 ============ */
 .menu-section{padding:160px 48px;background:var(--bg2)}
@@ -237,7 +232,7 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
 
 <!-- ======== HERO ======== -->
 <section class="hero">
-  <div class="hero-bg"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">대표 사진</span></div></div>
+  <div class="hero-bg"></div>
   <div class="hero-content">
     <div class="hero-big h-rv">NOIR</div>
     <div class="hero-row h-rv h-d1">
@@ -266,7 +261,7 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
   <h2 class="sec-title">스타일리스트</h2>
   <div class="st-grid">
     <div class="st-card rv rv-d1" data-hover="Profile">
-      <div class="st-img"><div class="st-img-inner st-bg-1"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일리스트</span></div></div>
+      <div class="st-img"><div class="st-img-inner st-bg-1"></div>
         <div class="st-overlay">
           <div class="st-overlay-name">이준호</div>
           <div class="st-overlay-role">Director · Founder · 15년 경력</div>
@@ -290,7 +285,7 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
       </div>
     </div>
     <div class="st-card rv rv-d2" data-hover="Profile">
-      <div class="st-img"><div class="st-img-inner st-bg-2"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일리스트</span></div></div>
+      <div class="st-img"><div class="st-img-inner st-bg-2"></div>
         <div class="st-overlay">
           <div class="st-overlay-name">박서연</div>
           <div class="st-overlay-role">Senior Designer · 10년 경력</div>
@@ -324,33 +319,33 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
   </div>
   <!-- 상단행: → 방향 -->
   <div class="gal-row top">
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
   </div>
   <!-- 하단행: ← 방향 -->
   <div class="gal-row bot">
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"><div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">스타일</span></div></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
   </div>
 </section>
 
@@ -480,12 +475,12 @@ document.querySelectorAll('.st-img').forEach(img=>{
 const lb=document.getElementById('lb'),lbInner=document.getElementById('lbInner'),lbCount=document.getElementById('lbCount');
 const lbItems=[];let lbIdx=0;
 const bgMap={
-  'gc-1':'linear-gradient(155deg,#222,#181818)','gc-2':'linear-gradient(155deg,#1c1c1c,#141414)',
-  'gc-3':'linear-gradient(155deg,#202020,#1a1a1a)','gc-4':'linear-gradient(155deg,#1e1e1e,#161616)',
-  'gc-5':'linear-gradient(155deg,#242424,#1c1c1c)','gc-6':'linear-gradient(155deg,#1a1a1a,#121212)',
-  'st-bg-1':'linear-gradient(155deg,#222,#1a1a1a)','st-bg-2':'linear-gradient(155deg,#1e1e1e,#161616)'
+  'gc-1':'url(https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80) center/cover no-repeat','gc-2':'url(https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1200&q=80) center/cover no-repeat',
+  'gc-3':'url(https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80) center/cover no-repeat','gc-4':'url(https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&q=80) center/cover no-repeat',
+  'gc-5':'url(https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=1200&q=80) center/cover no-repeat','gc-6':'url(https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?w=1200&q=80) center/cover no-repeat',
+  'st-bg-1':'url(https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=1200&q=80) center/cover no-repeat','st-bg-2':'url(https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=1200&q=80) center/cover no-repeat'
 };
-const phSVG='<div class="ph"><div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><span class="ph-text">사진</span></div>';
+
 
 // 갤러리 원본 6장 수집 (top행 앞 6개)
 const topCells=document.querySelectorAll('.gal-row.top .gal-cell');
@@ -513,7 +508,7 @@ function closeLb(){lb.classList.remove('open');document.body.style.overflow='';
 function renderLb(){
   const item=lbItems[lbIdx];if(!item)return;
   lbInner.style.opacity='0';
-  setTimeout(()=>{lbInner.style.background=bgMap[item.bg]||'var(--bg3)';lbInner.innerHTML=phSVG;lbInner.style.opacity='1'},150);
+  setTimeout(()=>{lbInner.style.background=bgMap[item.bg]||'var(--bg3)';lbInner.innerHTML='';lbInner.style.opacity='1'},150);
   lbCount.textContent=`${lbIdx+1} / ${lbItems.length}`;
 }
 document.getElementById('lbClose').addEventListener('click',closeLb);
