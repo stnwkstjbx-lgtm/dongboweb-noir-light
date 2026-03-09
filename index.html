@@ -7,6 +7,43 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HairSalon",
+  "name": "뤼느 LUNE",
+  "description": "한남동 프라이빗 헤어살롱. 컷, 컬러, 펌, 케어 전문.",
+  "url": "https://dongboweb-noir-light.vercel.app",
+  "telephone": "02-000-0000",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "한남대로 00길 8, 3층",
+    "addressLocality": "용산구",
+    "addressRegion": "서울특별시",
+    "postalCode": "04410",
+    "addressCountry": "KR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 37.5340,
+    "longitude": 126.9970
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "11:00",
+      "closes": "21:00"
+    }
+  ],
+  "priceRange": "₩25,000 ~ ₩120,000",
+  "image": "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80",
+  "sameAs": ["https://instagram.com/lune.salon"]
+}
+</script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -15,31 +52,83 @@
   --dim:#666;--dim2:#333;--dim3:#444;
   --border:rgba(255,255,255,.06);
   --display:'Syne',sans-serif;--body:'Noto Sans KR',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
 }
 html{scroll-behavior:smooth;cursor:none}
 body{font-family:var(--body);background:var(--bg);color:var(--fg);overflow-x:hidden;font-weight:300;cursor:none;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
 ::selection{background:var(--fg);color:var(--bg)}
 a,button{cursor:none}::-webkit-scrollbar{width:0}
 
-/* ============ CURSOR ============ */
+/* ===== PRELOADER ===== */
+.preloader{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease}
+.preloader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.pre-brand{display:flex;gap:4px;margin-bottom:16px}
+.pre-char{font-family:var(--display);font-size:clamp(2.4rem,6vw,4rem);font-weight:800;text-transform:uppercase;color:var(--fg);opacity:0;transform:translateY(20px);animation:preCharIn .5s var(--ease) forwards}
+.pre-char:nth-child(1){animation-delay:.05s}
+.pre-char:nth-child(2){animation-delay:.12s}
+.pre-char:nth-child(3){animation-delay:.19s}
+.pre-char:nth-child(4){animation-delay:.26s}
+.pre-line{width:0;height:1px;background:var(--fg);animation:preLineIn .6s .4s var(--ease) forwards}
+@keyframes preLineIn{to{width:80px}}
+.pre-sub{font-family:var(--display);font-size:.55rem;color:var(--dim);letter-spacing:.35em;text-transform:uppercase;margin-top:14px;opacity:0;animation:preSubIn .5s .6s ease forwards}
+@keyframes preCharIn{to{opacity:1;transform:none}}
+@keyframes preSubIn{to{opacity:1}}
+
+/* ===== SCROLL PROGRESS ===== */
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:9998;background:transparent;pointer-events:none}
+.scroll-progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--fg),var(--dim));transition:width .05s linear}
+
+/* ===== TOAST SYSTEM ===== */
+.toast-container{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:10020;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{padding:12px 24px;background:rgba(30,30,30,.85);backdrop-filter:blur(16px);border:1px solid var(--border);color:var(--fg2);font-size:.76rem;font-weight:300;letter-spacing:.02em;border-radius:4px;
+  opacity:0;transform:translateY(12px);animation:toastIn .3s ease forwards;pointer-events:auto}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastIn{to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-8px)}}
+
+/* ===== BACK TO TOP ===== */
+.btt{position:fixed;bottom:100px;right:28px;width:42px;height:42px;border-radius:50%;background:var(--fg);border:none;display:flex;align-items:center;justify-content:center;
+  z-index:95;opacity:0;pointer-events:none;transform:translateY(8px);transition:all .4s var(--ease);cursor:none}
+.btt.show{opacity:1;pointer-events:auto;transform:none}
+.btt:hover{transform:translateY(-3px);box-shadow:0 4px 20px rgba(255,255,255,.15)}
+.btt svg{width:16px;height:16px;stroke:var(--bg);stroke-width:2;fill:none}
+
+/* ===== CURSOR ===== */
 .cur{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--fg);pointer-events:none;z-index:10000;mix-blend-mode:difference}
-.cur-ring{position:fixed;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.1);pointer-events:none;z-index:9999;transition:all .3s cubic-bezier(.16,1,.3,1)}
+.cur-ring{position:fixed;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.1);pointer-events:none;z-index:9999;transition:all .3s var(--ease)}
 .cur-ring.hover{width:72px;height:72px;border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.03)}
 .cur-ring.nav-hover{width:52px;height:52px;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.02)}
 .cur-text{position:fixed;pointer-events:none;z-index:10001;font-size:.46rem;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;opacity:0;transition:opacity .3s;font-weight:500;font-family:var(--display)}
 .cur-text.show{opacity:1}
 
-
-/* ============ NAV — 좌 링크 + 우 로고 (반전) ============ */
+/* ===== NAV ===== */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:28px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
 nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .nav-left-links{display:flex;gap:28px}
 .nav-link{font-family:var(--display);font-size:.6rem;color:var(--dim);text-decoration:none;letter-spacing:.12em;text-transform:uppercase;transition:color .3s;font-weight:500}
 .nav-link:hover{color:var(--fg)}
 .nav-logo{font-family:var(--display);font-size:1.2rem;font-weight:700;text-decoration:none;color:var(--fg);letter-spacing:.2em;text-transform:uppercase}
-.hbg{display:none;background:none;border:none;flex-direction:column;gap:5px;padding:4px}.hbg span{width:20px;height:1px;background:var(--fg);display:block}
+.hbg{display:none;background:none;border:none;flex-direction:column;gap:5px;padding:4px;z-index:250;position:relative}
+.hbg span{width:20px;height:1px;background:var(--fg);display:block;transition:all .3s var(--ease)}
+.hbg.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+.hbg.open span:nth-child(2){opacity:0}
+.hbg.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
 
-/* ============ HERO — 좌정렬 초대형 영문 ============ */
+/* ===== MOBILE OVERLAY ===== */
+.mob-overlay{position:fixed;inset:0;z-index:210;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
+.mob-overlay.open{opacity:1;pointer-events:auto}
+.mob-overlay a{font-family:var(--display);font-size:clamp(1.4rem,5vw,2rem);font-weight:700;text-decoration:none;color:var(--fg);letter-spacing:.12em;text-transform:uppercase;
+  opacity:0;transform:translateY(16px);transition:all .4s var(--ease)}
+.mob-overlay.open a{opacity:1;transform:none}
+.mob-overlay.open a:nth-child(1){transition-delay:.05s}
+.mob-overlay.open a:nth-child(2){transition-delay:.1s}
+.mob-overlay.open a:nth-child(3){transition-delay:.15s}
+.mob-overlay.open a:nth-child(4){transition-delay:.2s}
+.mob-overlay.open a:nth-child(5){transition-delay:.25s}
+.mob-overlay.open a:nth-child(6){transition-delay:.3s}
+
+/* ===== HERO ===== */
 .hero{height:100vh;position:relative;display:flex;align-items:flex-end;padding:48px;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,.55);z-index:1}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80') center/cover no-repeat;display:flex;align-items:center;justify-content:center}
@@ -50,48 +139,67 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 .hero-desc p{font-size:.8rem;color:rgba(255,255,255,.85);line-height:2;font-weight:300;text-shadow:0 2px 12px rgba(0,0,0,.8)}
 .hero-meta{text-align:right;display:flex;flex-direction:column;gap:4px}
 .hero-meta span{font-size:.5rem;color:rgba(255,255,255,.55);letter-spacing:.25em;text-transform:uppercase;line-height:2.2;white-space:nowrap;text-shadow:0 2px 12px rgba(0,0,0,.8)}
-.h-rv{opacity:0;transform:translateY(24px);animation:hIn 1.1s cubic-bezier(.16,1,.3,1) forwards}
+.h-rv{opacity:0;transform:translateY(24px);animation:hIn 1.1s var(--ease) forwards}
 .h-d1{animation-delay:.3s}.h-d2{animation-delay:.5s}.h-d3{animation-delay:.7s}
 @keyframes hIn{to{opacity:1;transform:none}}
 
-/* ============ ABOUT — 대형 인용구 ============ */
+/* ===== ABOUT ===== */
 .about{padding:160px 48px;max-width:860px;margin:0 auto}
 .about-quote{font-family:var(--body);font-size:clamp(1.2rem,2.2vw,1.7rem);font-weight:200;line-height:1.9;letter-spacing:-.01em;color:var(--fg2)}
 .about-quote em{font-style:italic;color:var(--fg)}
 .about-sub{margin-top:24px;font-size:.78rem;color:var(--dim);line-height:2.2;font-weight:300;max-width:480px}
 .about-line{width:40px;height:1px;background:var(--dim2);margin-bottom:24px}
 
-/* ============ STYLISTS ============ */
+/* ===== STORY / STATS ===== */
+.story-section{padding:0 48px 160px;max-width:1000px;margin:0 auto}
+.story-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:64px;align-items:start;margin-top:48px}
+.story-text p{font-size:.84rem;color:var(--fg2);line-height:2.2;font-weight:300;margin-bottom:16px}
+.story-text p:last-child{margin-bottom:0}
+.stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);padding:32px 24px;text-align:center;transition:all .4s var(--ease)}
+.stat-card:hover{background:var(--bg3);border-color:var(--dim2)}
+.counter{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:var(--fg);letter-spacing:-.02em;margin-bottom:4px;display:block}
+.stat-label{font-size:.6rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;margin-top:8px;font-weight:400}
+
+/* ===== STYLISTS ===== */
 .stylists{padding:0 48px 160px}
 .sec-label{font-family:var(--display);font-size:.48rem;letter-spacing:.4em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;font-weight:600;white-space:nowrap}
 .sec-title{font-family:var(--body);font-size:clamp(1.3rem,2.4vw,1.8rem);font-weight:200;letter-spacing:-.01em;margin-bottom:56px;color:var(--fg2)}
-
 .st-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;margin:0 auto}
-.st-card{position:relative;overflow:hidden;transition:all .5s cubic-bezier(.16,1,.3,1)}
-.st-bg-1{background:url('https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80') center/cover no-repeat}.st-bg-2{background:url('https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=800&q=80') center/cover no-repeat}
+.st-card{position:relative;overflow:hidden;transition:all .5s var(--ease)}
+.st-bg-1{background:url('https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=800&q=80') center/cover no-repeat}
+.st-bg-2{background:url('https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=800&q=80') center/cover no-repeat}
 .st-info{padding:20px 0}
 .st-info h3{font-family:var(--body);font-size:1rem;font-weight:400;margin-bottom:4px;letter-spacing:.02em}
 .st-role{font-size:.52rem;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;font-weight:400;margin-bottom:12px}
 .st-tags{display:flex;gap:6px;flex-wrap:wrap}
 .st-tag{font-size:.48rem;color:var(--dim);letter-spacing:.1em;padding:4px 10px;border:1px solid var(--border);font-weight:400;white-space:nowrap}
 
-/* ============ GALLERY — 2행 역방향 마키 ============ */
+/* ===== GALLERY ===== */
 .gallery-section{padding:80px 0;overflow:hidden}
 .gallery-header{padding:0 48px;margin-bottom:32px}
+.gal-filters{display:flex;gap:10px;padding:0 48px;margin-bottom:28px;flex-wrap:wrap}
+.gal-filter{font-family:var(--display);font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:1px solid var(--border);
+  padding:7px 18px;cursor:pointer;transition:all .35s var(--ease);font-weight:500}
+.gal-filter:hover,.gal-filter.active{color:var(--fg);border-color:var(--fg);background:rgba(255,255,255,.04)}
 .gal-row{display:flex;gap:4px;width:max-content;margin-bottom:4px}
 .gal-row:hover{animation-play-state:paused}
 .gal-row.top{animation:galLeft 40s linear infinite}
 .gal-row.bot{animation:galRight 45s linear infinite}
 @keyframes galLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes galRight{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
-.gal-cell{width:280px;height:340px;overflow:hidden;position:relative;flex-shrink:0}
-.gal-cell-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:all .6s cubic-bezier(.16,1,.3,1);filter:grayscale(1) contrast(1.05)}
+.gal-cell{width:280px;height:340px;overflow:hidden;position:relative;flex-shrink:0;transition:opacity .4s ease}
+.gal-cell.dimmed{opacity:.15}
+.gal-cell-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:all .6s var(--ease);filter:grayscale(1) contrast(1.05)}
 .gal-cell:hover .gal-cell-inner{filter:grayscale(.5) contrast(1.1);transform:scale(1.06)}
-.gc-1{background:url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80') center/cover no-repeat}.gc-2{background:url('https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=800&q=80') center/cover no-repeat}
-.gc-3{background:url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&q=80') center/cover no-repeat}.gc-4{background:url('https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800&q=80') center/cover no-repeat}
-.gc-5{background:url('https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=800&q=80') center/cover no-repeat}.gc-6{background:url('https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?w=800&q=80') center/cover no-repeat}
+.gc-1{background:url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80') center/cover no-repeat}
+.gc-2{background:url('https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=800&q=80') center/cover no-repeat}
+.gc-3{background:url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&q=80') center/cover no-repeat}
+.gc-4{background:url('https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=800&q=80') center/cover no-repeat}
+.gc-5{background:url('https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=800&q=80') center/cover no-repeat}
+.gc-6{background:url('https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?w=800&q=80') center/cover no-repeat}
 
-/* ============ MENU — 2×2 가격 그리드 ============ */
+/* ===== MENU ===== */
 .menu-section{padding:160px 48px;background:var(--bg2)}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;max-width:900px;margin:56px auto 0}
 .menu-cat{background:var(--bg);padding:48px 36px;border:1px solid var(--border)}
@@ -105,7 +213,39 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 .mi-p{font-family:var(--display);font-size:.82rem;color:var(--fg);font-weight:500;white-space:nowrap}
 .mi-sub{font-size:.6rem;color:var(--dim);margin-top:2px;font-weight:300}
 
-/* ============ INFO ============ */
+/* ===== PROCESS ===== */
+.process-section{padding:160px 48px;background:var(--bg)}
+.proc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1000px;margin:56px auto 0}
+.proc-step{background:var(--bg2);border:1px solid var(--border);padding:40px 28px;text-align:center;transition:all .5s var(--ease);position:relative}
+.proc-step:hover{background:var(--bg3);border-color:var(--dim2);transform:translateY(-4px)}
+.proc-num{font-family:var(--display);font-size:2.4rem;font-weight:800;color:var(--dim2);letter-spacing:-.02em;margin-bottom:8px;line-height:1}
+.proc-icon{font-size:1.4rem;margin-bottom:16px;display:block;color:var(--dim);opacity:.6}
+.proc-title{font-family:var(--display);font-size:.8rem;font-weight:600;letter-spacing:.08em;margin-bottom:12px;color:var(--fg)}
+.proc-desc{font-size:.72rem;color:var(--dim);line-height:2;font-weight:300}
+.proc-arrow{position:absolute;right:-14px;top:50%;transform:translateY(-50%);width:24px;height:24px;z-index:2}
+.proc-arrow svg{width:24px;height:24px;stroke:var(--dim2);stroke-width:1;fill:none}
+
+/* ===== BRAND QUOTE BAND ===== */
+.quote-band{padding:100px 48px;background:var(--bg2);text-align:center}
+.quote-band-text{font-family:var(--display);font-size:clamp(1.1rem,2.4vw,1.6rem);font-weight:400;color:var(--fg2);letter-spacing:.04em;line-height:2;max-width:640px;margin:0 auto;font-style:italic}
+.quote-band-attr{margin-top:20px;font-size:.52rem;color:var(--dim);letter-spacing:.3em;text-transform:uppercase;font-weight:500;font-family:var(--display)}
+
+/* ===== FAQ ACCORDION ===== */
+.faq-section{padding:160px 48px;background:var(--bg)}
+.faq-list{max-width:760px;margin:48px auto 0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-q{width:100%;background:none;border:none;color:var(--fg);font-family:var(--body);font-size:.88rem;font-weight:400;text-align:left;padding:22px 0;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;transition:color .3s;letter-spacing:.01em}
+.faq-q:hover{color:var(--fg2)}
+.faq-q-icon{width:20px;height:20px;position:relative;flex-shrink:0}
+.faq-q-icon span{position:absolute;background:var(--dim);transition:all .3s var(--ease)}
+.faq-q-icon span:nth-child(1){width:12px;height:1px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.faq-q-icon span:nth-child(2){width:1px;height:12px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.faq-item.open .faq-q-icon span:nth-child(2){transform:translate(-50%,-50%) rotate(90deg);opacity:0}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease),padding .4s}
+.faq-a-inner{padding:0 0 22px;font-size:.78rem;color:var(--dim);line-height:2.2;font-weight:300}
+
+/* ===== INFO ===== */
 .info-section{padding:120px 48px}
 .info-layout{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;max-width:840px;margin:48px auto 0}
 .info-col h4{font-family:var(--display);font-size:.46rem;letter-spacing:.35em;text-transform:uppercase;color:var(--dim);margin-bottom:14px;font-weight:600}
@@ -117,30 +257,41 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
   padding:10px 22px;background:var(--fg);border:1px solid var(--fg);transition:all .4s;letter-spacing:.1em;font-weight:500}
 .book-btn:hover{background:transparent;color:var(--fg);transform:translateY(-2px)}
 
-/* ============ FOOTER ============ */
-footer{padding:48px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
-footer p{font-size:.55rem;color:var(--dim2);letter-spacing:.1em}
-footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color .3s}footer a:hover{color:var(--fg)}
+/* ===== FOOTER ===== */
+.footer-main{padding:80px 48px 0;border-top:1px solid var(--border);background:var(--bg)}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;max-width:1000px;margin:0 auto}
+.footer-col h5{font-family:var(--display);font-size:.46rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;font-weight:600}
+.footer-col p{font-size:.74rem;color:var(--dim);line-height:2.2;font-weight:300}
+.footer-col a{display:block;font-size:.74rem;color:var(--dim);text-decoration:none;line-height:2.4;font-weight:300;transition:color .3s}
+.footer-col a:hover{color:var(--fg)}
+.footer-brand{font-family:var(--display);font-size:1.4rem;font-weight:700;color:var(--fg);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px}
+.footer-brand-desc{font-size:.72rem;color:var(--dim);line-height:2;font-weight:300;margin-bottom:16px;max-width:280px}
+.footer-social a{display:inline-flex;align-items:center;gap:6px;font-size:.6rem;color:var(--dim);text-decoration:none;letter-spacing:.1em;transition:color .3s}
+.footer-social a:hover{color:var(--fg)}
+.footer-bottom{max-width:1000px;margin:40px auto 0;padding:20px 0 28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.footer-bottom p{font-size:.52rem;color:var(--dim2);letter-spacing:.1em}
 
-/* ============ FLOATING ============ */
-.kakao-float{position:fixed;bottom:28px;right:28px;width:50px;height:50px;border-radius:50%;background:#FEE500;display:flex;align-items:center;justify-content:center;text-decoration:none;z-index:90;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .4s cubic-bezier(.16,1,.3,1)}
+/* ===== FLOATING ===== */
+.kakao-float{position:fixed;bottom:28px;right:28px;width:50px;height:50px;border-radius:50%;background:#FEE500;display:flex;align-items:center;justify-content:center;text-decoration:none;z-index:90;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .4s var(--ease)}
 .kakao-float:hover{transform:translateY(-4px) scale(1.06)}
 .kakao-float svg{width:24px;height:24px;fill:#3C1E1E}
 .mobile-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,.95);backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:10px 16px;z-index:100}
-.mb-inner{display:flex;gap:8px}.mobile-bar a{flex:1;text-align:center;padding:14px;text-decoration:none;font-size:.8rem;font-weight:400;letter-spacing:.04em;transition:all .3s}
-.m-line{border:1px solid var(--fg);color:var(--fg)}.m-fill{background:var(--fg);color:var(--bg)}
+.mb-inner{display:flex;gap:8px}
+.mobile-bar a{flex:1;text-align:center;padding:14px;text-decoration:none;font-size:.8rem;font-weight:400;letter-spacing:.04em;transition:all .3s}
+.m-line{border:1px solid var(--fg);color:var(--fg)}
+.m-fill{background:var(--fg);color:var(--bg)}
 
-/* ============ ANIMATIONS ============ */
-.rv{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}.rv.show{opacity:1;transform:none}
+/* ===== ANIMATIONS ===== */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.show{opacity:1;transform:none}
 .rv-d1{transition-delay:.1s}.rv-d2{transition-delay:.2s}.rv-d3{transition-delay:.3s}
 
-
-/* 스타일리스트 약력 오버레이 */
+/* ===== STYLIST OVERLAY ===== */
 .st-img{aspect-ratio:3/4;overflow:hidden;position:relative;cursor:pointer}
-.st-img-inner{width:100%;height:100%;transition:transform .8s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;justify-content:center}
+.st-img-inner{width:100%;height:100%;transition:transform .8s var(--ease);display:flex;align-items:center;justify-content:center}
 .st-card:hover .st-img-inner{transform:scale(1.04)}
 .st-overlay{position:absolute;inset:0;background:rgba(10,10,10,.88);backdrop-filter:blur(12px);display:flex;flex-direction:column;justify-content:flex-end;padding:32px;
-  opacity:0;pointer-events:none;transition:opacity .4s cubic-bezier(.16,1,.3,1)}
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
 .st-overlay.open{opacity:1;pointer-events:auto}
 .st-overlay-name{font-family:var(--display);font-size:1.4rem;font-weight:700;letter-spacing:.06em;margin-bottom:4px;text-transform:uppercase}
 .st-overlay-role{font-size:.52rem;color:var(--dim);letter-spacing:.25em;text-transform:uppercase;margin-bottom:16px}
@@ -149,12 +300,12 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
 .st-overlay-cert{font-size:.48rem;color:var(--dim);letter-spacing:.1em;padding:4px 10px;border:1px solid var(--border);font-weight:400;white-space:nowrap}
 .st-overlay-close{font-family:var(--display);font-size:.44rem;color:var(--dim);letter-spacing:.3em;text-transform:uppercase;align-self:flex-start;margin-top:auto;padding-top:12px}
 
-/* ============ LIGHTBOX ============ */
+/* ===== LIGHTBOX ===== */
 .lb-overlay{position:fixed;inset:0;z-index:10010;background:rgba(10,10,10,.96);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .4s cubic-bezier(.16,1,.3,1)}
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease)}
 .lb-overlay.open{opacity:1;pointer-events:auto}
 .lb-container{position:relative;width:min(86vw,800px);height:min(70vh,600px);overflow:hidden;
-  transform:scale(.92) translateY(12px);transition:transform .5s cubic-bezier(.16,1,.3,1);border-radius:2px}
+  transform:scale(.92) translateY(12px);transition:transform .5s var(--ease);border-radius:2px}
 .lb-overlay.open .lb-container{transform:scale(1) translateY(0)}
 .lb-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;filter:grayscale(.8) contrast(1.05);transition:opacity .25s ease}
 .lb-close{position:absolute;top:24px;right:24px;z-index:10012;width:40px;height:40px;border:none;background:rgba(255,255,255,.04);
@@ -168,47 +319,91 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
 .lb-prev{left:24px}.lb-next{right:24px}
 .lb-counter{position:absolute;top:28px;left:32px;z-index:10012;font-size:.55rem;color:rgba(255,255,255,.15);letter-spacing:.2em;font-family:var(--display)}
 
-/* ============ TABLET ============ */
+/* ===== TABLET ===== */
 @media(max-width:1024px) and (min-width:769px){
   .menu-grid{grid-template-columns:1fr;gap:10px}
   .info-layout{grid-template-columns:1fr 1fr;gap:32px}
+  .story-grid{grid-template-columns:1fr;gap:40px}
+  .stat-cards{grid-template-columns:repeat(4,1fr)}
+  .proc-steps{grid-template-columns:1fr 1fr;gap:10px}
+  .proc-arrow{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .faq-list{max-width:100%}
+  .quote-band{padding:80px 32px}
 }
 
-/* ============ WIDESCREEN ============ */
+/* ===== WIDESCREEN ===== */
 @media(min-width:1400px){
   .hero{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
   .about{max-width:none;padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
   .about-quote{max-width:720px}
+  .story-section{max-width:none;padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
   .stylists{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
   .st-grid{max-width:100%;margin:0}
   .gallery-header{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
+  .gal-filters{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
   .menu-section{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
   .menu-grid{max-width:100%;margin-top:56px;margin-left:0;margin-right:0}
+  .process-section{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
+  .proc-steps{max-width:100%;margin-left:0;margin-right:0}
+  .quote-band{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
+  .faq-section{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
+  .faq-list{max-width:760px}
   .info-section{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
   .info-layout{max-width:100%;margin-left:0;margin-right:0}
-  footer{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
+  .footer-main{padding-left:calc((100vw - 1200px)/2);padding-right:calc((100vw - 1200px)/2)}
+  .footer-grid{max-width:100%}
+  .footer-bottom{max-width:100%}
 }
-/* ============ RESPONSIVE ============ */
+
+/* ===== RESPONSIVE ===== */
 @media(max-width:768px){
   br{display:none}
-  html,body,a,button{cursor:auto}.cur,.cur-ring,.cur-text{display:none}
-  nav{padding:16px 20px}.nav-left-links{display:none}.hbg{display:flex}
+  html,body,a,button{cursor:auto}
+  .cur,.cur-ring,.cur-text{display:none}
+  nav{padding:16px 20px}
+  .nav-left-links{display:none}
+  .hbg{display:flex}
   nav.scrolled{padding:12px 20px}
   .hero{padding:24px 20px;min-height:100vh}
   .hero-big{font-size:clamp(3.6rem,14vw,6rem)}
   .hero-row{flex-direction:column;gap:16px;align-items:flex-start}
   .hero-meta{text-align:left}
-  .about{padding:80px 20px}.about-quote{font-size:clamp(1.1rem,4vw,1.5rem)}
-  .stylists{padding:0 20px 80px}.st-grid{grid-template-columns:1fr;gap:32px}
-  .gallery-section{padding:60px 0}.gallery-header{padding:0 20px}
+  .about{padding:80px 20px}
+  .about-quote{font-size:clamp(1.1rem,4vw,1.5rem)}
+  .story-section{padding:0 20px 80px}
+  .story-grid{grid-template-columns:1fr;gap:32px}
+  .stat-cards{grid-template-columns:1fr 1fr}
+  .stat-card{padding:24px 16px}
+  .stylists{padding:0 20px 80px}
+  .st-grid{grid-template-columns:1fr;gap:32px}
+  .gallery-section{padding:60px 0}
+  .gallery-header{padding:0 20px}
+  .gal-filters{padding:0 20px;margin-bottom:20px;gap:8px}
+  .gal-filter{padding:6px 14px;font-size:.48rem}
   .gal-cell{width:200px;height:250px}
-  .menu-section{padding:80px 20px}.menu-grid{grid-template-columns:1fr;gap:10px}
+  .menu-section{padding:80px 20px}
+  .menu-grid{grid-template-columns:1fr;gap:10px}
   .menu-cat{padding:32px 24px}
   .mi-sub{display:block}
-  .info-section{padding:80px 20px}.info-layout{grid-template-columns:1fr;gap:28px}
+  .process-section{padding:80px 20px}
+  .proc-steps{grid-template-columns:1fr;gap:10px;margin-top:40px}
+  .proc-arrow{display:none}
+  .proc-step{padding:32px 24px}
+  .quote-band{padding:60px 20px}
+  .quote-band-text{font-size:clamp(1rem,4vw,1.3rem)}
+  .faq-section{padding:80px 20px}
+  .faq-list{margin-top:32px}
+  .faq-q{font-size:.82rem;padding:18px 0}
+  .info-section{padding:80px 20px}
+  .info-layout{grid-template-columns:1fr;gap:28px}
   .book-btn{margin-left:0;margin-top:8px;display:inline-flex}
-  footer{flex-direction:column;gap:8px;padding:28px 20px 100px}
-  .kakao-float{display:none}.mobile-bar{display:block}
+  .footer-main{padding:60px 20px 0}
+  .footer-grid{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:8px;padding:20px 0 100px}
+  .kakao-float{display:none}
+  .mobile-bar{display:block}
+  .btt{bottom:80px;right:16px;width:36px;height:36px}
   .lb-container{width:92vw;height:65vh}
   .lb-prev{left:8px}.lb-next{right:8px}
   .lb-nav{width:36px;height:36px}
@@ -218,26 +413,75 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
   .st-overlay-name{font-size:1.1rem}
   .st-overlay-bio{font-size:.72rem}
 }
+
+/* ===== REDUCED MOTION ===== */
+@media(prefers-reduced-motion:reduce){
+  .gal-row.top,.gal-row.bot{animation:none}
+  .preloader{display:none}
+  .rv{opacity:1;transform:none;transition:none}
+  .h-rv{opacity:1;transform:none;animation:none}
+  .proc-step{transition:none}
+  .stat-card{transition:none}
+}
 </style></head><body>
 
-<!-- CURSOR -->
+<!-- ===== PRELOADER ===== -->
+<div class="preloader" id="preloader">
+  <div class="pre-brand">
+    <span class="pre-char">L</span>
+    <span class="pre-char">U</span>
+    <span class="pre-char">N</span>
+    <span class="pre-char">E</span>
+  </div>
+  <div class="pre-line"></div>
+  <div class="pre-sub">Hair Salon &middot; Hannam</div>
+</div>
+
+<!-- ===== SCROLL PROGRESS ===== -->
+<div class="scroll-progress">
+  <div class="scroll-progress-bar" id="scrollBar"></div>
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== BACK TO TOP ===== -->
+<button class="btt" id="btt" aria-label="맨 위로 이동" tabindex="0">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- ===== CURSOR ===== -->
 <div class="cur" id="cur"></div>
 <div class="cur-ring" id="ring"></div>
 <div class="cur-text" id="curText"></div>
 
-<!-- NAV — 좌 링크 + 우 로고 (반전) -->
+<!-- ===== NAV ===== -->
 <nav id="nav">
   <div class="nav-left-links">
     <a class="nav-link" href="#stylists">Stylists</a>
     <a class="nav-link" href="#gallery">Gallery</a>
     <a class="nav-link" href="#menu">Menu</a>
+    <a class="nav-link" href="#process">Process</a>
+    <a class="nav-link" href="#faq">FAQ</a>
     <a class="nav-link" href="#info">Visit</a>
   </div>
   <a class="nav-logo" href="#">LUNE</a>
-  <button class="hbg"><span></span><span></span><span></span></button>
+  <button class="hbg" id="hbg" aria-label="메뉴 열기" tabindex="0">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- ======== HERO ======== -->
+<!-- ===== MOBILE OVERLAY ===== -->
+<div class="mob-overlay" id="mobOverlay">
+  <a href="#stylists" class="mob-link">Stylists</a>
+  <a href="#gallery" class="mob-link">Gallery</a>
+  <a href="#menu" class="mob-link">Menu</a>
+  <a href="#process" class="mob-link">Process</a>
+  <a href="#faq" class="mob-link">FAQ</a>
+  <a href="#info" class="mob-link">Visit</a>
+</div>
+
+<!-- ===== HERO ===== -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
@@ -247,31 +491,63 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
         <p>당신만의 스타일을 완성하는 곳.<br>한남동 프라이빗 헤어살롱.</p>
       </div>
       <div class="hero-meta h-rv h-d2">
-        <span>Hannam-dong Hair Salon · LUNE</span>
-        <span>Tue — Sun · 11:00 — 21:00</span>
+        <span>Hannam-dong Hair Salon &middot; LUNE</span>
+        <span>Tue — Sun &middot; 11:00 — 21:00</span>
         <span>한남역 1번출구 3분</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ======== ABOUT ======== -->
+<!-- ===== ABOUT ===== -->
 <section class="about rv">
   <div class="about-line"></div>
   <p class="about-quote">머리카락 한 올에도 <em>의도</em>가 있어야 합니다. 트렌드를 따르되 맹목적이지 않고, 개성을 살리되 과하지 않게. 그 균형을 찾는 것이 우리가 하는 일입니다.</p>
   <p class="about-sub">뤼느는 2019년 한남동에서 시작했습니다. 한 명의 고객에게 충분한 시간을 드리기 위해 하루 예약을 제한합니다. 빠르게 돌리는 살롱이 아닙니다.</p>
 </section>
 
-<!-- ======== STYLISTS ======== -->
+<!-- ===== STORY / STATS ===== -->
+<section class="story-section rv" id="story">
+  <div class="sec-label">Our Story</div>
+  <h2 class="sec-title">LUNE의 이야기</h2>
+  <div class="story-grid">
+    <div class="story-text">
+      <p>뤼느는 '달'을 뜻하는 프랑스어입니다. 달빛처럼 은은하지만 분명하게, 각자의 아름다움을 비추는 공간을 만들고 싶었습니다.</p>
+      <p>한남동 골목 3층. 작은 공간이지만, 한 분 한 분에게 온전히 집중할 수 있는 환경을 갖추었습니다. 대형 살롱의 효율 대신, 프라이빗 살롱만이 줄 수 있는 밀도를 선택했습니다.</p>
+      <p>컷 하나에도 두상의 형태, 모발의 결, 라이프스타일을 함께 고려합니다. 시술이 끝난 뒤에도 스타일이 유지되도록, 홈케어 가이드까지 함께 안내합니다.</p>
+    </div>
+    <div class="stat-cards">
+      <div class="stat-card rv rv-d1">
+        <span class="counter" data-target="2019">0</span>
+        <div class="stat-label">Since</div>
+      </div>
+      <div class="stat-card rv rv-d2">
+        <span class="counter" data-target="25" data-suffix="+">0</span>
+        <div class="stat-label">Years Combined</div>
+      </div>
+      <div class="stat-card rv rv-d1">
+        <span class="counter" data-target="8">0</span>
+        <div class="stat-label">Daily Max</div>
+      </div>
+      <div class="stat-card rv rv-d2">
+        <span class="counter" data-target="2800" data-suffix="+">0</span>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STYLISTS ===== -->
 <section class="stylists rv" id="stylists">
   <div class="sec-label">Stylists</div>
   <h2 class="sec-title">스타일리스트</h2>
   <div class="st-grid">
     <div class="st-card rv rv-d1" data-hover="Profile">
-      <div class="st-img"><div class="st-img-inner st-bg-1"></div>
+      <div class="st-img">
+        <div class="st-img-inner st-bg-1"></div>
         <div class="st-overlay">
           <div class="st-overlay-name">이준호</div>
-          <div class="st-overlay-role">Director · Founder · 15년 경력</div>
+          <div class="st-overlay-role">Director &middot; Founder &middot; 15년 경력</div>
           <p class="st-overlay-bio">컷에 가장 진심인 사람. 모발의 결과 두상의 형태를 읽고, 가위 하나로 실루엣을 만들어냅니다. "트렌드보다 중요한 건 그 사람에게 어울리는 것."</p>
           <div class="st-overlay-certs">
             <span class="st-overlay-cert">Vidal Sassoon Academy</span>
@@ -283,7 +559,7 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
       </div>
       <div class="st-info">
         <h3>이준호</h3>
-        <div class="st-role">Director · Founder</div>
+        <div class="st-role">Director &middot; Founder</div>
         <div class="st-tags">
           <span class="st-tag">컷 전문</span>
           <span class="st-tag">남성 스타일링</span>
@@ -292,14 +568,15 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
       </div>
     </div>
     <div class="st-card rv rv-d2" data-hover="Profile">
-      <div class="st-img"><div class="st-img-inner st-bg-2"></div>
+      <div class="st-img">
+        <div class="st-img-inner st-bg-2"></div>
         <div class="st-overlay">
           <div class="st-overlay-name">박서연</div>
-          <div class="st-overlay-role">Senior Designer · 10년 경력</div>
+          <div class="st-overlay-role">Senior Designer &middot; 10년 경력</div>
           <p class="st-overlay-bio">컬러리스트. 피부 톤과 라이프스타일을 분석해 가장 자연스러운 컬러를 제안합니다. 발레아쥬, 옴브레 등 디자인 컬러에 특히 강합니다.</p>
           <div class="st-overlay-certs">
-            <span class="st-overlay-cert">L'Oréal Colour Specialist</span>
-            <span class="st-overlay-cert">컬러 & 펌 전문</span>
+            <span class="st-overlay-cert">L'Or&eacute;al Colour Specialist</span>
+            <span class="st-overlay-cert">컬러 &amp; 펌 전문</span>
             <span class="st-overlay-cert">여성 스타일링</span>
           </div>
           <div class="st-overlay-close">Tap to close</div>
@@ -318,45 +595,52 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
   </div>
 </section>
 
-<!-- ======== GALLERY — 2행 역방향 마키 ======== -->
+<!-- ===== GALLERY ===== -->
 <section class="gallery-section rv" id="gallery">
   <div class="gallery-header">
     <div class="sec-label">Gallery</div>
     <h2 class="sec-title">작업 갤러리</h2>
   </div>
-  <!-- 상단행: → 방향 -->
-  <div class="gal-row top">
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
+  <!-- Filter Tags -->
+  <div class="gal-filters">
+    <button class="gal-filter active" data-filter="all" tabindex="0" role="button">All</button>
+    <button class="gal-filter" data-filter="cut" tabindex="0" role="button">Cut</button>
+    <button class="gal-filter" data-filter="color" tabindex="0" role="button">Color</button>
+    <button class="gal-filter" data-filter="perm" tabindex="0" role="button">Perm</button>
   </div>
-  <!-- 하단행: ← 방향 -->
+  <!-- Top Row -->
+  <div class="gal-row top">
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-3"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-6"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-3"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-6"></div></div>
+  </div>
+  <!-- Bottom Row -->
   <div class="gal-row bot">
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-4"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-5"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-6"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-1"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-2"></div></div>
-    <div class="gal-cell" data-hover="View"><div class="gal-cell-inner gc-3"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-6"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-3"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-4"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-5"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="perm"><div class="gal-cell-inner gc-6"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-1"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="cut"><div class="gal-cell-inner gc-2"></div></div>
+    <div class="gal-cell" data-hover="View" data-style="color"><div class="gal-cell-inner gc-3"></div></div>
   </div>
 </section>
 
-<!-- ======== MENU ======== -->
+<!-- ===== MENU ===== -->
 <section class="menu-section rv" id="menu">
   <div class="sec-label">Menu</div>
   <h2 class="sec-title">가격 안내</h2>
@@ -373,7 +657,7 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
       <div class="mi"><div class="mi-row"><span class="mi-n">전체 컬러</span><span class="mi-d"></span><span class="mi-p">80,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">새치 커버</span><span class="mi-d"></span><span class="mi-p">60,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">블리치 1회</span><span class="mi-d"></span><span class="mi-p">70,000</span></div></div>
-      <div class="mi"><div class="mi-row"><span class="mi-n">발레아쥬 / 옴브레</span><span class="mi-d"></span><span class="mi-p">120,000~</span></div><div class="mi-sub">디자인 컬러 · 상담 필수</div></div>
+      <div class="mi"><div class="mi-row"><span class="mi-n">발레아쥬 / 옴브레</span><span class="mi-d"></span><span class="mi-p">120,000~</span></div><div class="mi-sub">디자인 컬러 &middot; 상담 필수</div></div>
     </div>
     <div class="menu-cat rv rv-d1">
       <div class="menu-cat-title"><span class="menu-cat-num">03</span> Perm</div>
@@ -386,13 +670,122 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
       <div class="menu-cat-title"><span class="menu-cat-num">04</span> Care</div>
       <div class="mi"><div class="mi-row"><span class="mi-n">두피 스케일링</span><span class="mi-d"></span><span class="mi-p">30,000</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">모발 클리닉</span><span class="mi-d"></span><span class="mi-p">40,000~</span></div></div>
-      <div class="mi"><div class="mi-row"><span class="mi-n">헤드스파</span><span class="mi-d"></span><span class="mi-p">50,000</span></div><div class="mi-sub">두피 마사지 포함 · 40분</div></div>
+      <div class="mi"><div class="mi-row"><span class="mi-n">헤드스파</span><span class="mi-d"></span><span class="mi-p">50,000</span></div><div class="mi-sub">두피 마사지 포함 &middot; 40분</div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">트리트먼트 추가</span><span class="mi-d"></span><span class="mi-p">15,000~</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ======== INFO ======== -->
+<!-- ===== PROCESS ===== -->
+<section class="process-section rv" id="process">
+  <div class="sec-label">Process</div>
+  <h2 class="sec-title">시술 프로세스</h2>
+  <div class="proc-steps">
+    <div class="proc-step rv rv-d1">
+      <div class="proc-num">01</div>
+      <div class="proc-icon" aria-hidden="true">&#9998;</div>
+      <div class="proc-title">상담</div>
+      <p class="proc-desc">취향, 라이프스타일, 모발 상태를 충분히 파악합니다. 원하는 스타일의 레퍼런스를 함께 살펴봅니다.</p>
+      <div class="proc-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+      </div>
+    </div>
+    <div class="proc-step rv rv-d2">
+      <div class="proc-num">02</div>
+      <div class="proc-icon" aria-hidden="true">&#9906;</div>
+      <div class="proc-title">진단</div>
+      <p class="proc-desc">두피 상태, 모질, 얼굴형을 분석합니다. 시술 방향과 예상 결과를 미리 안내합니다.</p>
+      <div class="proc-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+      </div>
+    </div>
+    <div class="proc-step rv rv-d1">
+      <div class="proc-num">03</div>
+      <div class="proc-icon" aria-hidden="true">&#9988;</div>
+      <div class="proc-title">시술</div>
+      <p class="proc-desc">맞춤 디자인과 프리미엄 제품으로 시술합니다. 과정마다 중간 확인을 드립니다.</p>
+      <div class="proc-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+      </div>
+    </div>
+    <div class="proc-step rv rv-d2">
+      <div class="proc-num">04</div>
+      <div class="proc-icon" aria-hidden="true">&#10024;</div>
+      <div class="proc-title">스타일링</div>
+      <p class="proc-desc">마무리 스타일링 후, 홈케어 가이드와 유지 관리 팁을 안내합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRAND QUOTE BAND ===== -->
+<section class="quote-band rv">
+  <p class="quote-band-text">"좋은 헤어스타일은 거울을 볼 때가 아니라,<br>일상 속에서 자신감을 느낄 때 완성됩니다."</p>
+  <div class="quote-band-attr">LUNE &middot; Hannam</div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq-section rv" id="faq">
+  <div class="sec-label">FAQ</div>
+  <h2 class="sec-title">자주 묻는 질문</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q" tabindex="0" role="button" aria-expanded="false">
+        <span>예약은 어떻게 하나요?</span>
+        <span class="faq-q-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">카카오톡 채널(@lune.salon)을 통해 예약하실 수 있습니다. 원하시는 날짜, 시간, 시술 내용을 말씀해 주시면 확인 후 안내드립니다. 전화 예약도 가능합니다.</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" tabindex="0" role="button" aria-expanded="false">
+        <span>당일 예약이 가능한가요?</span>
+        <span class="faq-q-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">뤼느는 완전 예약제로 운영됩니다. 하루 예약 인원을 제한하고 있어 당일 예약은 어려울 수 있습니다. 여유 있게 2~3일 전 예약을 권장드립니다.</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" tabindex="0" role="button" aria-expanded="false">
+        <span>시술 시간은 얼마나 걸리나요?</span>
+        <span class="faq-q-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">컷은 약 40~50분, 컬러는 1시간 30분~2시간, 펌은 2~3시간 정도 소요됩니다. 복합 시술의 경우 더 걸릴 수 있으며, 예약 시 예상 소요 시간을 안내드립니다.</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" tabindex="0" role="button" aria-expanded="false">
+        <span>상담만 받을 수 있나요?</span>
+        <span class="faq-q-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">네, 시술 전 상담만 별도로 받으실 수 있습니다. 모발 상태 진단과 스타일 제안을 드리며, 상담은 무료입니다. 카카오톡으로 상담 예약을 잡아주세요.</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" tabindex="0" role="button" aria-expanded="false">
+        <span>제품 구매가 가능한가요?</span>
+        <span class="faq-q-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">살롱에서 사용하는 프리미엄 헤어 제품을 구매하실 수 있습니다. 모질과 시술에 맞는 홈케어 제품을 스타일리스트가 직접 추천드립니다.</div>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" tabindex="0" role="button" aria-expanded="false">
+        <span>주차가 가능한가요?</span>
+        <span class="faq-q-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">건물 지하 주차장을 이용하실 수 있으며, 1시간 무료 주차를 지원합니다. 한남역 1번 출구에서 도보 3분 거리이므로 대중교통 이용도 편리합니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INFO ===== -->
 <section class="info-section rv" id="info">
   <div class="sec-label">Visit Us</div>
   <h2 class="sec-title">찾아오시는 길</h2>
@@ -400,7 +793,7 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
     <div class="info-col">
       <h4>Address</h4>
       <p>서울 용산구 한남대로 00길 8, 3층<br>한남역 1번 출구 도보 3분</p>
-      <a href="https://map.kakao.com" class="map-btn" target="_blank" rel="noopener noreferrer">카카오맵 →</a>
+      <a href="https://map.kakao.com" class="map-btn" target="_blank" rel="noopener noreferrer">카카오맵 &rarr;</a>
       <a href="https://pf.kakao.com/_zAqqX_lune" class="book-btn" target="_blank" rel="noopener noreferrer">예약하기</a>
     </div>
     <div class="info-col">
@@ -414,154 +807,415 @@ footer a{color:var(--dim);text-decoration:none;font-size:.55rem;transition:color
   </div>
 </section>
 
-<footer>
-  <p>&copy; 2025 LUNE — Hannam</p>
-  <a href="https://instagram.com/lune.salon" target="_blank" rel="noopener noreferrer">@lune.salon &rarr;</a>
+<!-- ===== FOOTER ===== -->
+<footer class="footer-main">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-brand">LUNE</div>
+      <p class="footer-brand-desc">한남동 프라이빗 헤어살롱. 한 명의 고객에게 충분한 시간을 드리기 위해 하루 예약을 제한합니다.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/lune.salon" target="_blank" rel="noopener noreferrer">@lune.salon &rarr;</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Menu</h5>
+      <a href="#stylists">Stylists</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#menu">Price</a>
+      <a href="#process">Process</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h5>Hours</h5>
+      <p>화 — 일<br>11:00 – 21:00<br>월요일 정기 휴무</p>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <p>서울 용산구 한남대로 00길 8, 3층</p>
+      <a href="tel:02-000-0000">02-000-0000</a>
+      <a href="https://pf.kakao.com/_zAqqX_lune" target="_blank" rel="noopener noreferrer">카카오톡 채널</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 LUNE — Hannam. All rights reserved.</p>
+    <p>Designed by Dongbo Web</p>
+  </div>
 </footer>
 
+<!-- ===== KAKAO FLOAT ===== -->
 <a href="https://pf.kakao.com/_zAqqX_lune" class="kakao-float" target="_blank" rel="noopener noreferrer">
   <svg viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.83 1.88 5.32 4.71 6.73-.17.65-.63 2.37-.72 2.74-.11.46.17.46.36.33.15-.1 2.37-1.62 3.33-2.27.74.1 1.51.17 2.32.17 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/></svg>
 </a>
-<div class="mobile-bar"><div class="mb-inner">
-  <a href="tel:02-000-0000" class="m-line">전화</a>
-  <a href="https://pf.kakao.com/_zAqqX_lune" class="m-fill" target="_blank" rel="noopener noreferrer">예약하기</a>
-</div></div>
 
-<!-- LIGHTBOX -->
+<!-- ===== MOBILE BAR ===== -->
+<div class="mobile-bar">
+  <div class="mb-inner">
+    <a href="tel:02-000-0000" class="m-line">전화</a>
+    <a href="https://pf.kakao.com/_zAqqX_lune" class="m-fill" target="_blank" rel="noopener noreferrer">예약하기</a>
+  </div>
+</div>
+
+<!-- ===== LIGHTBOX ===== -->
 <div class="lb-overlay" id="lb">
   <span class="lb-counter" id="lbCount"></span>
-  <button class="lb-close" id="lbClose"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
-  <button class="lb-nav lb-prev" id="lbPrev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-  <button class="lb-nav lb-next" id="lbNext"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></button>
+  <button class="lb-close" id="lbClose" aria-label="닫기" tabindex="0">
+    <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="이전" tabindex="0">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="다음" tabindex="0">
+    <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+  </button>
   <div class="lb-container">
     <div class="lb-inner" id="lbInner"></div>
   </div>
 </div>
 
 <script>
-// CURSOR
-const cur=document.getElementById('cur'),ring=document.getElementById('ring'),ct=document.getElementById('curText');
-let mx=0,my=0,cx=0,cy=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function loop(){cx+=(mx-cx)*.2;cy+=(my-cy)*.2;rx+=(mx-rx)*.07;ry+=(my-ry)*.07;
-  cur.style.transform=`translate(${cx-3}px,${cy-3}px)`;
-  ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;
-  ct.style.transform=`translate(${rx+24}px,${ry-8}px)`;
-  requestAnimationFrame(loop)})();
-document.querySelectorAll('[data-hover]').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ring.classList.add('hover');ct.textContent=el.dataset.hover;ct.classList.add('show')});
-  el.addEventListener('mouseleave',()=>{ring.classList.remove('hover');ct.classList.remove('show')});
+// ===== PRELOADER =====
+(function() {
+  var pre = document.getElementById('preloader');
+  if (!pre) return;
+  window.addEventListener('load', function() {
+    setTimeout(function() { pre.classList.add('hide'); }, 1400);
+    setTimeout(function() { pre.style.display = 'none'; }, 1900);
+  });
+})();
+
+// ===== SCROLL PROGRESS BAR =====
+var scrollBar = document.getElementById('scrollBar');
+function updateScrollProgress() {
+  var h = document.documentElement.scrollHeight - window.innerHeight;
+  var pct = h > 0 ? (scrollY / h) * 100 : 0;
+  scrollBar.style.width = pct + '%';
+}
+
+// ===== TOAST SYSTEM =====
+var toastContainer = document.getElementById('toastContainer');
+function showToast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  toastContainer.appendChild(t);
+  setTimeout(function() { t.classList.add('out'); }, 2800);
+  setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 3100);
+}
+
+// ===== BACK TO TOP =====
+var bttBtn = document.getElementById('btt');
+bttBtn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+function updateBtt() {
+  bttBtn.classList.toggle('show', scrollY > 600);
+}
+
+// ===== CURSOR =====
+var cur = document.getElementById('cur');
+var ring = document.getElementById('ring');
+var ct = document.getElementById('curText');
+var mx = 0, my = 0, cx = 0, cy = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', function(e) {
+  mx = e.clientX;
+  my = e.clientY;
 });
 
-// NAV scroll + active section
-const navEl=document.getElementById('nav');
-const navSections=document.querySelectorAll('section[id]');
-const navLinks=document.querySelectorAll('.nav-link');
-window.addEventListener('scroll',()=>{
-  navEl.classList.toggle('scrolled',scrollY>80);
-  let curSec='';navSections.forEach(s=>{if(scrollY>=s.offsetTop-200)curSec=s.id});
-  navLinks.forEach(l=>{l.style.color=l.getAttribute('href')==='#'+curSec?'var(--fg)':''});
-},{passive:true});
+(function loop() {
+  cx += (mx - cx) * .2;
+  cy += (my - cy) * .2;
+  rx += (mx - rx) * .07;
+  ry += (my - ry) * .07;
+  cur.style.transform = 'translate(' + (cx - 3) + 'px,' + (cy - 3) + 'px)';
+  ring.style.transform = 'translate(' + (rx - 18) + 'px,' + (ry - 18) + 'px)';
+  ct.style.transform = 'translate(' + (rx + 24) + 'px,' + (ry - 8) + 'px)';
+  requestAnimationFrame(loop);
+})();
 
-// NAV-HOVER cursor
-document.querySelectorAll('.nav-link,.nav-logo,.map-btn,.book-btn,.kakao-float,.lb-close,.lb-nav,.st-img').forEach(el=>{
-  el.addEventListener('mouseenter',()=>ring.classList.add('nav-hover'));
-  el.addEventListener('mouseleave',()=>ring.classList.remove('nav-hover'));
+document.querySelectorAll('[data-hover]').forEach(function(el) {
+  el.addEventListener('mouseenter', function() {
+    ring.classList.add('hover');
+    ct.textContent = el.dataset.hover;
+    ct.classList.add('show');
+  });
+  el.addEventListener('mouseleave', function() {
+    ring.classList.remove('hover');
+    ct.classList.remove('show');
+  });
 });
 
-// ============ STYLIST OVERLAY ============
-document.querySelectorAll('.st-img').forEach(img=>{
-  img.addEventListener('click',()=>{
-    const ov=img.querySelector('.st-overlay');
-    if(!ov)return;
+// ===== NAV SCROLL + ACTIVE SECTION =====
+var navEl = document.getElementById('nav');
+var navSections = document.querySelectorAll('section[id]');
+var navLinks = document.querySelectorAll('.nav-link');
+
+window.addEventListener('scroll', function() {
+  navEl.classList.toggle('scrolled', scrollY > 80);
+  var curSec = '';
+  navSections.forEach(function(s) {
+    if (scrollY >= s.offsetTop - 200) curSec = s.id;
+  });
+  navLinks.forEach(function(l) {
+    l.style.color = l.getAttribute('href') === '#' + curSec ? 'var(--fg)' : '';
+  });
+  updateScrollProgress();
+  updateBtt();
+}, { passive: true });
+
+// ===== NAV-HOVER CURSOR =====
+document.querySelectorAll('.nav-link,.nav-logo,.map-btn,.book-btn,.kakao-float,.lb-close,.lb-nav,.st-img,.gal-filter,.faq-q,.btt,.footer-col a').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { ring.classList.add('nav-hover'); });
+  el.addEventListener('mouseleave', function() { ring.classList.remove('nav-hover'); });
+});
+
+// ===== MOBILE OVERLAY =====
+var hbg = document.getElementById('hbg');
+var mobOverlay = document.getElementById('mobOverlay');
+
+hbg.addEventListener('click', function() {
+  hbg.classList.toggle('open');
+  mobOverlay.classList.toggle('open');
+  document.body.style.overflow = mobOverlay.classList.contains('open') ? 'hidden' : '';
+  hbg.setAttribute('aria-label', mobOverlay.classList.contains('open') ? '메뉴 닫기' : '메뉴 열기');
+});
+
+document.querySelectorAll('.mob-link').forEach(function(link) {
+  link.addEventListener('click', function() {
+    hbg.classList.remove('open');
+    mobOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// ===== STYLIST OVERLAY =====
+document.querySelectorAll('.st-img').forEach(function(img) {
+  img.addEventListener('click', function() {
+    var ov = img.querySelector('.st-overlay');
+    if (!ov) return;
     ov.classList.toggle('open');
   });
 });
 
-// ============ LIGHTBOX ============
-const lb=document.getElementById('lb'),lbInner=document.getElementById('lbInner'),lbCount=document.getElementById('lbCount');
-const lbItems=[];let lbIdx=0;
-const bgMap={
-  'gc-1':'url(https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80) center/cover no-repeat','gc-2':'url(https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1200&q=80) center/cover no-repeat',
-  'gc-3':'url(https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80) center/cover no-repeat','gc-4':'url(https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&q=80) center/cover no-repeat',
-  'gc-5':'url(https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=1200&q=80) center/cover no-repeat','gc-6':'url(https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?w=1200&q=80) center/cover no-repeat',
-  'st-bg-1':'url(https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=1200&q=80) center/cover no-repeat','st-bg-2':'url(https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=1200&q=80) center/cover no-repeat'
-};
+// ===== GALLERY FILTER =====
+var galFilters = document.querySelectorAll('.gal-filter');
+var galCells = document.querySelectorAll('.gal-cell');
 
-
-// 갤러리 원본 6장 수집 (top행 앞 6개)
-const topCells=document.querySelectorAll('.gal-row.top .gal-cell');
-for(let i=0;i<6;i++){
-  const inner=topCells[i].querySelector('.gal-cell-inner');
-  const cls=[...inner.classList].find(c=>c.startsWith('gc-'))||'';
-  lbItems.push({bg:cls});
-}
-
-// 모든 갤러리 셀에 클릭 이벤트 (원본 인덱스 매핑)
-document.querySelectorAll('.gal-cell').forEach(cell=>{
-  cell.style.cursor='pointer';
-  cell.addEventListener('click',()=>{
-    const inner=cell.querySelector('.gal-cell-inner');
-    const cls=[...inner.classList].find(c=>c.startsWith('gc-'))||'';
-    const gcNum=parseInt(cls.replace('gc-',''))-1;
-    if(gcNum>=0&&gcNum<6)openLb(gcNum);
+galFilters.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    galFilters.forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var filter = btn.dataset.filter;
+    galCells.forEach(function(cell) {
+      if (filter === 'all') {
+        cell.classList.remove('dimmed');
+      } else {
+        cell.classList.toggle('dimmed', cell.dataset.style !== filter);
+      }
+    });
   });
 });
 
-function openLb(i){lbIdx=i;renderLb();lb.classList.add('open');document.body.style.overflow='hidden';
-  const kf=document.querySelector('.kakao-float');if(kf)kf.style.display='none'}
-function closeLb(){lb.classList.remove('open');document.body.style.overflow='';
-  const kf=document.querySelector('.kakao-float');if(kf)kf.style.display=''}
-function renderLb(){
-  const item=lbItems[lbIdx];if(!item)return;
-  lbInner.style.opacity='0';
-  setTimeout(()=>{lbInner.style.background=bgMap[item.bg]||'var(--bg3)';lbInner.innerHTML='';lbInner.style.opacity='1'},150);
-  lbCount.textContent=`${lbIdx+1} / ${lbItems.length}`;
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = btn.closest('.faq-item');
+    var answer = item.querySelector('.faq-a');
+    var isOpen = item.classList.contains('open');
+
+    // Close all items first
+    document.querySelectorAll('.faq-item').forEach(function(fi) {
+      fi.classList.remove('open');
+      fi.querySelector('.faq-a').style.maxHeight = '0';
+      fi.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+    });
+
+    // Open clicked item if it was closed
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+// ===== COUNTER ANIMATION =====
+var counterObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (!entry.isIntersecting) return;
+    var el = entry.target;
+    var target = parseInt(el.dataset.target);
+    var suffix = el.dataset.suffix || '';
+    var duration = 1600;
+    var startTime = null;
+
+    function animate(time) {
+      if (!startTime) startTime = time;
+      var progress = Math.min((time - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(eased * target);
+      el.textContent = current.toLocaleString() + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        el.textContent = target.toLocaleString() + suffix;
+      }
+    }
+
+    requestAnimationFrame(animate);
+    counterObs.unobserve(el);
+  });
+}, { threshold: .3 });
+
+document.querySelectorAll('.counter').forEach(function(el) {
+  counterObs.observe(el);
+});
+
+// ===== LIGHTBOX =====
+var lb = document.getElementById('lb');
+var lbInner = document.getElementById('lbInner');
+var lbCount = document.getElementById('lbCount');
+var lbItems = [];
+var lbIdx = 0;
+
+var bgMap = {
+  'gc-1': 'url(https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80) center/cover no-repeat',
+  'gc-2': 'url(https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1200&q=80) center/cover no-repeat',
+  'gc-3': 'url(https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80) center/cover no-repeat',
+  'gc-4': 'url(https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&q=80) center/cover no-repeat',
+  'gc-5': 'url(https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=1200&q=80) center/cover no-repeat',
+  'gc-6': 'url(https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?w=1200&q=80) center/cover no-repeat',
+  'st-bg-1': 'url(https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=1200&q=80) center/cover no-repeat',
+  'st-bg-2': 'url(https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=1200&q=80) center/cover no-repeat'
+};
+
+// Collect 6 unique gallery images from top row
+var topCells = document.querySelectorAll('.gal-row.top .gal-cell');
+for (var i = 0; i < 6; i++) {
+  var inner = topCells[i].querySelector('.gal-cell-inner');
+  var cls = Array.from(inner.classList).find(function(c) { return c.startsWith('gc-'); }) || '';
+  lbItems.push({ bg: cls });
 }
-document.getElementById('lbClose').addEventListener('click',closeLb);
-document.getElementById('lbPrev').addEventListener('click',()=>{lbIdx=(lbIdx-1+lbItems.length)%lbItems.length;renderLb()});
-document.getElementById('lbNext').addEventListener('click',()=>{lbIdx=(lbIdx+1)%lbItems.length;renderLb()});
-lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});
-document.addEventListener('keydown',e=>{
-  if(!lb.classList.contains('open'))return;
-  if(e.key==='Escape')closeLb();
-  if(e.key==='ArrowLeft'){lbIdx=(lbIdx-1+lbItems.length)%lbItems.length;renderLb()}
-  if(e.key==='ArrowRight'){lbIdx=(lbIdx+1)%lbItems.length;renderLb()}
-});
-let ltx=0;
-lb.addEventListener('touchstart',e=>{ltx=e.touches[0].clientX},{passive:true});
-lb.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-ltx;
-  if(Math.abs(dx)>50){if(dx<0)lbIdx=(lbIdx+1)%lbItems.length;else lbIdx=(lbIdx-1+lbItems.length)%lbItems.length;renderLb()}
+
+// Click handler for all gallery cells
+document.querySelectorAll('.gal-cell').forEach(function(cell) {
+  cell.style.cursor = 'pointer';
+  cell.addEventListener('click', function() {
+    var cellInner = cell.querySelector('.gal-cell-inner');
+    var cellCls = Array.from(cellInner.classList).find(function(c) { return c.startsWith('gc-'); }) || '';
+    var gcNum = parseInt(cellCls.replace('gc-', '')) - 1;
+    if (gcNum >= 0 && gcNum < 6) openLb(gcNum);
+  });
 });
 
-// SCROLL REVEAL
-const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');obs.unobserve(e.target)}})},{threshold:.05,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+function openLb(i) {
+  lbIdx = i;
+  renderLb();
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  var kf = document.querySelector('.kakao-float');
+  if (kf) kf.style.display = 'none';
+}
 
-// IMAGE ASSET PROTECTION
-document.addEventListener('contextmenu',e=>{
-  if(e.target.closest('.gal-cell,.st-img,.lb-overlay,img'))e.preventDefault();
+function closeLb() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  var kf = document.querySelector('.kakao-float');
+  if (kf) kf.style.display = '';
+}
+
+function renderLb() {
+  var item = lbItems[lbIdx];
+  if (!item) return;
+  lbInner.style.opacity = '0';
+  setTimeout(function() {
+    lbInner.style.background = bgMap[item.bg] || 'var(--bg3)';
+    while (lbInner.firstChild) lbInner.removeChild(lbInner.firstChild);
+    lbInner.style.opacity = '1';
+  }, 150);
+  lbCount.textContent = (lbIdx + 1) + ' / ' + lbItems.length;
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLb);
+document.getElementById('lbPrev').addEventListener('click', function() {
+  lbIdx = (lbIdx - 1 + lbItems.length) % lbItems.length;
+  renderLb();
 });
-document.addEventListener('dragstart',e=>{
-  if(e.target.tagName==='IMG'||e.target.closest('.gal-cell,.st-img,.lb-overlay'))e.preventDefault();
+document.getElementById('lbNext').addEventListener('click', function() {
+  lbIdx = (lbIdx + 1) % lbItems.length;
+  renderLb();
+});
+lb.addEventListener('click', function(e) {
+  if (e.target === lb) closeLb();
+});
+document.addEventListener('keydown', function(e) {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLb();
+  if (e.key === 'ArrowLeft') {
+    lbIdx = (lbIdx - 1 + lbItems.length) % lbItems.length;
+    renderLb();
+  }
+  if (e.key === 'ArrowRight') {
+    lbIdx = (lbIdx + 1) % lbItems.length;
+    renderLb();
+  }
+});
+var ltx = 0;
+lb.addEventListener('touchstart', function(e) { ltx = e.touches[0].clientX; }, { passive: true });
+lb.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - ltx;
+  if (Math.abs(dx) > 50) {
+    if (dx < 0) lbIdx = (lbIdx + 1) % lbItems.length;
+    else lbIdx = (lbIdx - 1 + lbItems.length) % lbItems.length;
+    renderLb();
+  }
 });
 
-// 포트폴리오 프리뷰용 자동스크롤 (iframe 안에 있을 때만 작동)
-var _isPreview=false;try{_isPreview=window.self!==window.top}catch(e){_isPreview=true}
-if(_isPreview){
-  var _asY=0,_asSpd=2.25,_asPaused=false;
-  function _asRun(){
-    if(!_asPaused){
-      _asY+=_asSpd;
-      var maxY=document.documentElement.scrollHeight-window.innerHeight;
-      if(_asY>=maxY){_asPaused=true;setTimeout(function(){_asY=0;window.scrollTo(0,0);_asPaused=false},800)}
-      else{window.scrollTo(0,_asY)}
+// ===== SCROLL REVEAL =====
+var obs = new IntersectionObserver(function(es) {
+  es.forEach(function(e) {
+    if (e.isIntersecting) {
+      e.target.classList.add('show');
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: .05, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.rv').forEach(function(el) { obs.observe(el); });
+
+// ===== IMAGE ASSET PROTECTION =====
+document.addEventListener('contextmenu', function(e) {
+  if (e.target.closest('.gal-cell,.st-img,.lb-overlay,img')) e.preventDefault();
+});
+document.addEventListener('dragstart', function(e) {
+  if (e.target.tagName === 'IMG' || e.target.closest('.gal-cell,.st-img,.lb-overlay')) e.preventDefault();
+});
+
+// ===== PREFERS REDUCED MOTION =====
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.gal-row').forEach(function(row) {
+    row.style.animation = 'none';
+  });
+}
+
+// ===== PORTFOLIO PREVIEW AUTO-SCROLL =====
+var _isPreview = false;
+try { _isPreview = window.self !== window.top; } catch (e) { _isPreview = true; }
+if (_isPreview) {
+  var _asY = 0, _asSpd = 2.25, _asPaused = false;
+  function _asRun() {
+    if (!_asPaused) {
+      _asY += _asSpd;
+      var maxY = document.documentElement.scrollHeight - window.innerHeight;
+      if (_asY >= maxY) {
+        _asPaused = true;
+        setTimeout(function() { _asY = 0; window.scrollTo(0, 0); _asPaused = false; }, 800);
+      } else {
+        window.scrollTo(0, _asY);
+      }
     }
     requestAnimationFrame(_asRun);
   }
-  window.addEventListener('load',function(){setTimeout(_asRun,1200)});
+  window.addEventListener('load', function() { setTimeout(_asRun, 1200); });
 }
-
 </script>
 </body></html>
