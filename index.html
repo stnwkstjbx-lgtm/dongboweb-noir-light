@@ -873,6 +873,8 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 </div>
 
 <script>
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+window.scrollTo(0,0);
 // ===== PRELOADER =====
 (function() {
   var pre = document.getElementById('preloader');
