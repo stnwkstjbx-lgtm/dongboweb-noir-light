@@ -212,6 +212,33 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 .mi-d{flex:1;margin:0 10px;border-bottom:1px solid var(--border)}
 .mi-p{font-family:var(--display);font-size:.82rem;color:var(--fg);font-weight:500;white-space:nowrap}
 .mi-sub{font-size:.6rem;color:var(--dim);margin-top:2px;font-weight:300}
+.menu-time{font-size:.48rem;color:var(--dim);font-weight:300;letter-spacing:.08em;margin-left:auto}
+
+/* ===== HOME CARE GUIDE ===== */
+.care-section{padding:120px 48px;text-align:center}
+.care-intro{font-size:.78rem;color:var(--dim);margin-top:12px;font-weight:300}
+.care-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:900px;margin:48px auto 0}
+.care-card{padding:40px 28px;background:var(--bg2);border:1px solid var(--border);transition:all .4s}
+.care-card:hover{border-color:var(--dim2)}
+.care-icon{margin-bottom:16px}.care-icon svg{width:24px;height:24px;stroke:var(--dim)}
+.care-card h4{font-family:var(--display);font-size:.88rem;font-weight:500;margin-bottom:12px;letter-spacing:.04em}
+.care-card p{font-size:.72rem;color:var(--dim);line-height:1.9;font-weight:300}
+
+/* ===== REVIEWS ===== */
+.review-section{padding:120px 48px;background:var(--bg2)}
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:900px;margin:48px auto 0}
+.review-card{padding:36px 28px;background:var(--bg);border:1px solid var(--border);transition:all .4s}
+.review-card:hover{border-color:var(--dim2)}
+.review-stars{color:#c4a265;font-size:.7rem;letter-spacing:2px;margin-bottom:16px}
+.review-text{font-size:.76rem;color:var(--fg2);line-height:2;font-weight:300;font-style:italic;margin-bottom:20px}
+.review-meta{display:flex;justify-content:space-between;align-items:center}
+.review-name{font-size:.68rem;color:var(--fg);font-weight:400}
+.review-service{font-size:.52rem;color:var(--dim);letter-spacing:.1em;border:1px solid var(--border);padding:3px 8px;white-space:nowrap}
+
+@media(max-width:768px){
+.care-grid,.review-grid{grid-template-columns:1fr}
+.care-section,.review-section{padding:80px 20px}
+}
 
 /* ===== PROCESS ===== */
 .process-section{padding:160px 48px;background:var(--bg)}
@@ -646,28 +673,28 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
   <h2 class="sec-title">가격 안내</h2>
   <div class="menu-grid">
     <div class="menu-cat rv rv-d1">
-      <div class="menu-cat-title"><span class="menu-cat-num">01</span> Cut</div>
+      <div class="menu-cat-title"><span class="menu-cat-num">01</span> Cut <span class="menu-time">약 40~50분</span></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">여성 컷</span><span class="mi-d"></span><span class="mi-p">50,000</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">남성 컷</span><span class="mi-d"></span><span class="mi-p">40,000</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">앞머리 컷</span><span class="mi-d"></span><span class="mi-p">10,000</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">키즈 컷</span><span class="mi-d"></span><span class="mi-p">25,000</span></div><div class="mi-sub">초등학생 이하</div></div>
     </div>
     <div class="menu-cat rv rv-d2">
-      <div class="menu-cat-title"><span class="menu-cat-num">02</span> Color</div>
+      <div class="menu-cat-title"><span class="menu-cat-num">02</span> Color <span class="menu-time">약 1.5~2시간</span></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">전체 컬러</span><span class="mi-d"></span><span class="mi-p">80,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">새치 커버</span><span class="mi-d"></span><span class="mi-p">60,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">블리치 1회</span><span class="mi-d"></span><span class="mi-p">70,000</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">발레아쥬 / 옴브레</span><span class="mi-d"></span><span class="mi-p">120,000~</span></div><div class="mi-sub">디자인 컬러 &middot; 상담 필수</div></div>
     </div>
     <div class="menu-cat rv rv-d1">
-      <div class="menu-cat-title"><span class="menu-cat-num">03</span> Perm</div>
+      <div class="menu-cat-title"><span class="menu-cat-num">03</span> Perm <span class="menu-time">약 2~3시간</span></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">디지털 펌</span><span class="mi-d"></span><span class="mi-p">100,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">볼륨 펌</span><span class="mi-d"></span><span class="mi-p">90,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">매직 스트레이트</span><span class="mi-d"></span><span class="mi-p">120,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">남성 펌</span><span class="mi-d"></span><span class="mi-p">60,000~</span></div></div>
     </div>
     <div class="menu-cat rv rv-d2">
-      <div class="menu-cat-title"><span class="menu-cat-num">04</span> Care</div>
+      <div class="menu-cat-title"><span class="menu-cat-num">04</span> Care <span class="menu-time">약 30~50분</span></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">두피 스케일링</span><span class="mi-d"></span><span class="mi-p">30,000</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">모발 클리닉</span><span class="mi-d"></span><span class="mi-p">40,000~</span></div></div>
       <div class="mi"><div class="mi-row"><span class="mi-n">헤드스파</span><span class="mi-d"></span><span class="mi-p">50,000</span></div><div class="mi-sub">두피 마사지 포함 &middot; 40분</div></div>
@@ -721,6 +748,53 @@ nav.scrolled{padding:16px 48px;background:rgba(10,10,10,.92);backdrop-filter:blu
 <section class="quote-band rv">
   <p class="quote-band-text">"좋은 헤어스타일은 거울을 볼 때가 아니라,<br>일상 속에서 자신감을 느낄 때 완성됩니다."</p>
   <div class="quote-band-attr">LUNE &middot; Hannam</div>
+</section>
+
+<!-- ===== HOME CARE GUIDE ===== -->
+<section class="care-section rv" id="care">
+  <div class="sec-label">Home Care</div>
+  <h2 class="sec-title">시술 후 홈케어 가이드</h2>
+  <p class="care-intro">시술 효과를 오래 유지하는 간단한 관리법을 안내드립니다.</p>
+  <div class="care-grid">
+    <div class="care-card rv rv-d1">
+      <div class="care-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 3v18M18 3v18M6 9h12M6 15h12"/></svg></div>
+      <h4>컷 후</h4>
+      <p>당일 샴푸 가능. 스타일 유지를 위해 4~6주마다 정리 컷을 추천드립니다. 자연 건조보다 드라이어로 결 방향에 맞춰 말려주세요.</p>
+    </div>
+    <div class="care-card rv rv-d2">
+      <div class="care-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/></svg></div>
+      <h4>컬러 후</h4>
+      <p>시술 후 48시간은 샴푸를 피해주세요. 컬러 전용 샴푸를 사용하면 색 빠짐이 줄어듭니다. 6~8주마다 터치업을 추천합니다.</p>
+    </div>
+    <div class="care-card rv rv-d3">
+      <div class="care-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2C8 2 4 6 4 12c0 4 2 8 8 10 6-2 8-6 8-10 0-6-4-10-8-10z"/></svg></div>
+      <h4>펌 후</h4>
+      <p>48시간 동안 머리를 묶거나 귀 뒤로 넘기지 마세요. 자연 건조 또는 디퓨저 사용을 권장합니다. 컬 크림으로 결을 살려주세요.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section class="review-section rv" id="reviews">
+  <div class="sec-label">Reviews</div>
+  <h2 class="sec-title">고객 후기</h2>
+  <div class="review-grid">
+    <div class="review-card rv rv-d1">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"예약제라 대기 없이 바로 시술받을 수 있어서 좋았어요. 준호 디렉터님이 두상에 맞는 컷을 제안해주셨는데 결과가 너무 만족스러웠습니다."</p>
+      <div class="review-meta"><span class="review-name">김지수</span><span class="review-service">여성 컷</span></div>
+    </div>
+    <div class="review-card rv rv-d2">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"발레아쥬 처음 했는데 서연 디자이너님이 모질 상태를 꼼꼼하게 확인하고 시술해주셔서 안심이었어요. 색이 정말 예쁘게 나왔습니다."</p>
+      <div class="review-meta"><span class="review-name">박하은</span><span class="review-service">발레아쥬</span></div>
+    </div>
+    <div class="review-card rv rv-d3">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"하루 8명만 받으신다고 해서 반신반의했는데, 진짜 한 분 한 분 정성껏 해주시는 게 느껴져요. 홈케어 방법까지 알려주셔서 집에서도 스타일 유지가 잘 됩니다."</p>
+      <div class="review-meta"><span class="review-name">이민재</span><span class="review-service">남성 컷 + 펌</span></div>
+    </div>
+  </div>
 </section>
 
 <!-- ===== FAQ ===== -->
